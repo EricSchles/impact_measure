@@ -68,6 +68,31 @@ def direction_morph(x_1, x_2):
         return 1
 
 def impact(x_1, x_2):
+    """
+    A non-parametric effect size measure
+    
+    Parameters
+    ----------
+    * x_1 : np.array 
+    * x_2 : np.array
+
+    Returns
+    -------
+    An impact measure between the two variables.
+    You can use this to measure correlation between two features
+    or impact between a variable and the target.
+
+    Example
+    -------
+    >>> from impact_measure import impact
+    >>> x_1 = np.random.random(size=1000) * 10
+    >>> x_2 = np.random.random(size=1000) * 15
+    >>> 4.755890101301915
+
+    Note: bigger impact means larger effect size,
+    smaller impact means smaller effect size
+    reference: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7514071/
+    """
     ctdw = central_tendency_diff_weight(x_1, x_2)
     dct = direction_central_tendency(x_1, x_2)
     ctd = central_tendency_diff(x_1, x_2)
@@ -78,6 +103,23 @@ def impact(x_1, x_2):
     return central_tendency + morphic
     
 def cohen_d(x_1, x_2):
+    """
+    A parametric effect size measure
+    
+    Parameters
+    ----------
+    * x_1 : np.array 
+    * x_2 : np.array
+
+    Returns
+    -------
+    An effect size measure between the two variables.
+    You can use this to measure correlation between two features
+    or impact between a variable and the target.
+
+    Note:
+    We assume that the data is normally distributed for x_1 and x_2.
+    """
     n_1, n_2 = x_1.shape[0], x_2.shape[0]
     var_1, var_2 = np.var(x_1, ddof=1), np.var(x_2, ddof=1)
     num_1 = (n_1 - 1) * var_1

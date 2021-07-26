@@ -18,8 +18,9 @@ def debug_impact():
     x_1 = np.random.random(size=1000) * 10
     x_2 = np.random.random(size=1000) * 15
     i = impact(x_1, x_2)
+    print(i)
     import code
     code.interact(local=locals())
 
 if __name__ == '__main__':
-    debug_cohen_d()
+    debug_impact()
