@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.stats as pareto
+from scipy.stats import pareto
 
 def gini_mean_diff(x):
     n = x.shape[0]
@@ -13,6 +13,7 @@ def gini_mean_diff(x):
 def pooled_variability_gini_mean_diff(x_1, x_2):
     if (np.var(x_1) > 0) and (np.var(x_2) > 0):
         gmd_x_1 = gini_mean_diff(x_1)
+        gmd_x_2 = gini_mean_diff(x_2)
         gmd_x_1_sqrd = np.power(gmd_x_1, 2)
         gmd_x_2_sqrd = np.power(gmd_x_2, 2)
         summation = gmd_x_1_sqrd + gmd_x_2_sqrd
@@ -60,7 +61,8 @@ def momentum(x):
     return L/abs_L
 
 def direction_morph(x_1, x_2):
-    if momentum(x_2) < momentum(x_1):
+    mx_1, mx_2 = momentum(x_1), momentum(x_2)
+    if len(mx_1[mx_1 > mx_2]) < 0.5:
         return -1
     else:
         return 1
@@ -75,3 +77,11 @@ def impact(x_1, x_2):
     morphic = (1 - ctdw) * dm * md
     return central_tendency + morphic
     
+def cohen_d(x_1, x_2):
+    n_1, n_2 = x_1.shape[0], x_2.shape[0]
+    var_1, var_2 = np.var(x_1, ddof=1), np.var(x_2, ddof=1)
+    num_1 = (n_1 - 1) * var_1
+    num_2 = (n_2 - 1) * var_2
+    s = np.sqrt((num_1 + num_2) / (n_1 + n_2 - 2))
+    ct_1, ct_2 = np.mean(x_1), np.mean(x_2)
+    return (ct_1 - ct_2) / s
